@@ -1,25 +1,19 @@
-# Etapa de construção
-FROM node:18 AS build
+FROM python:3.10-slim
 
 WORKDIR /app
 
-COPY package.json package-lock.json ./
-RUN npm install
+# Instalar dependências do sistema (se necessário)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Definir a variável de ambiente para o backend
-ENV REACT_APP_BACKEND_URL=http://localhost:5000
+# Copiar requirements.txt e instalar dependências Python
+COPY requirements.txt /app/
+RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . .
-RUN npm run build
+# Copiar a aplicação para o contêiner
+COPY . /app
 
-# Etapa final: servidor NGINX
-FROM nginx:alpine
-
-
-
-# Copiar os arquivos do build do frontend para o NGINX
-COPY --from=build /app/build /usr/share/nginx/html
-EXPOSE 80
-
-# Iniciar o servidor NGINX
-CMD ["nginx", "-g", "daemon off;"]
+# Garantir que o Flask aceite conexões externas, ajustando o comando de execução
+# Alterado para 0.0.0.0 para permitir conexões de fora do contêiner (NGINX)
+CMD ["python", "run.py", "--host=0.0.0.0", "--port=5000"]
