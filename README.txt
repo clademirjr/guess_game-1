@@ -55,7 +55,6 @@ Execute o comando para iniciar todos os serviços:
 docker-compose up --build
 
 
-- **O que está acontecendo aqui?**
   - O Docker Compose vai baixar as imagens necessárias, construir os contêineres e iniciá-los.
 
 ### 3. Acessar a Aplicação
