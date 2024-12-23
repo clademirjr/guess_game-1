@@ -105,7 +105,7 @@ docker-compose restart nginx
 
 ## Conclusão
 
-Neste projeto, você aprendeu a:
+Neste projeto foi aprendido
 
 - Configurar um ambiente **fullstack** usando **Docker Compose**.
 - Criar um **proxy reverso** com o NGINX.
